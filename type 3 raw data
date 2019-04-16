@@ -1,0 +1,25 @@
+#final code to analyse image with its id 
+#import numpy as np 
+import cv2 face_cascade = cv2.CascadeClassifier(“C:\ProgramData\Anaconda3\Library\etc\haarcascades\haarcascade_frontalface_default.xml”) 
+cam = cv2.VideoCapture(0) 
+rec = cv2.face.LBPHFaceRecognizer_create(); 
+rec.read(“recognizer/trainingData.yml”)
+font=cv2.FONT_HERSHEY_COMPLEX_SMALL 
+fontScale=1 
+fontColor=(208,225,30) 
+lineType=2
+while(True):
+ret, img = cam.read();
+gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+faces = face_cascade.detectMultiScale(gray,3.5,5);
+for (x,y,w,h) in faces:
+cv2.rectangle(img,(x,y),(x+w,y+h),(255,0,0),2);
+id,conf=rec.predict(gray[y:y+h,x:x+w])
+if(id==0):
+id =“vinit”
+else:
+id=“unknown”;
+cv2.putText(img,str(id),(x,y+h),font,fontScale,fontColor,lineType);
+cv2.imshow(‘img’,img);
+if cv2.waitKey(10) :
+break cam.release() cv2.destroyAllWindows()
